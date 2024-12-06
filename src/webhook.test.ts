@@ -3,13 +3,11 @@ import express from 'express';
 import { BitunixAPI } from './bitunix';
 import { TradingViewAlert } from './types';
 
-// Mock the BitunixAPI class
 jest.mock('./bitunix');
 
 const app = express();
 app.use(express.json());
 
-// Import the webhook route handler
 const {
   TRADINGVIEW_WEBHOOK_TOKEN,
   BITUNIX_API_KEY = '',
@@ -29,7 +27,7 @@ app.post('/webhook', async (req, res) => {
     if (!alert.symbol || !alert.side || !alert.quantity) {
       return res.status(400).json({ error: 'Missing required fields: symbol, side, quantity' });
     }
-    
+
     const order = await bitunix.placeOrder({
       symbol: alert.symbol,
       qty: alert.quantity,
